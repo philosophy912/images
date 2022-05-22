@@ -5,11 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -46,11 +42,14 @@ public class Main extends Application {
     private Image image;
     private ImageView imageView;
     private StackPane stackPane;
+
     private final String lineEnd = "\n";
 
     private String currentFolder = null;
     private final List<File> fileList = new LinkedList<>();
     private int index = 0;
+
+//    private int zoom = 2;
 
 
     private Canvas createCanvas(double width, double height) {
@@ -95,9 +94,11 @@ public class Main extends Application {
         image = new Image(url);
         width = image.getWidth();
         height = image.getHeight();
+        System.out.println("width is " + width + " height is " + height);
         primaryStage.setWidth(width);
         primaryStage.setHeight(height + size);
         imageView.setImage(image);
+        imageView.setPreserveRatio(true);
         stackPane.getChildren().remove(1);
         stackPane.getChildren().add(createCanvas(width, height));
     }
@@ -196,17 +197,19 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         imageView = new ImageView();
         MenuBar menuBar = createMenuBar(primaryStage);
+        ScrollPane scrollPane = new ScrollPane();
         stackPane = new StackPane();
         stackPane.getChildren().addAll(imageView, createCanvas(width, height));
+        scrollPane.setContent(stackPane);
         HBox hBox = createHBox(primaryStage);
         VBox root = new VBox();
-        root.getChildren().addAll(menuBar, stackPane, hBox);
+        root.getChildren().addAll(menuBar, scrollPane, hBox);
         Scene scene = new Scene(root, width, height + size);
         Image icon = new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("cat.png")));
         primaryStage.getIcons().setAll(icon);
         primaryStage.setTitle("图片位置打开器");
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.show();
     }
 
