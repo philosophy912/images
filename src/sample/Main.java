@@ -33,6 +33,7 @@ public class Main extends Application {
 
     private final double size = 240d;
 
+
     private double x1;
     private double y1;
     private double x2;
@@ -95,6 +96,16 @@ public class Main extends Application {
         width = image.getWidth();
         height = image.getHeight();
         System.out.println("width is " + width + " height is " + height);
+        // 这里需要限制，不要超过屏幕分辨率
+        // 被限制的宽高
+        double maxWidth = 1000d;
+        if (width > maxWidth) {
+            width = maxWidth;
+        }
+        double maxHeight = 700d;
+        if (height > maxHeight) {
+            height = maxHeight;
+        }
         primaryStage.setWidth(width);
         primaryStage.setHeight(height + size);
         imageView.setImage(image);
