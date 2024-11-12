@@ -28,8 +28,8 @@ import java.util.Objects;
 
 public class Main extends Application {
 
-    private double width = 1280d;
-    private double height = 720d;
+    private final double width = 1280d;
+    private final double height = 720d;
 
     private final double size = 240d;
 
@@ -80,8 +80,8 @@ public class Main extends Application {
             y2 = e.getY();
             double w = x2 - x1;
             double h = y2 - y1;
-            String first = (int) x1 + "-" + (int) y1 + "-" + (int) w + "-" + (int) h;
-            String second = "[  " + (int) (x1 + w / 2) + "-" + (int) (y1 + h / 2) + "  ]";
+            String first = (int) x1 + "-" + (int) y1 + "-" + (int) w + "-" + (int) h + "[左上角x-左上角y-宽度-高度]";
+            String second = "中心点[  " + (int) (x1 + w / 2) + "-" + (int) (y1 + h / 2) + "  ]";
             if (null != image) {
                 gc.clearRect(0, 0, width, height);
                 gc.strokeRoundRect(x1, y1, w, h, 0, 0);
@@ -93,25 +93,15 @@ public class Main extends Application {
 
     private void showImage(Stage primaryStage, String url) {
         image = new Image(url);
-        width = image.getWidth();
-        height = image.getHeight();
-        System.out.println("width is " + width + " height is " + height);
-        // 这里需要限制，不要超过屏幕分辨率
-        // 被限制的宽高
-        double maxWidth = 1000d;
-        if (width > maxWidth) {
-            width = maxWidth;
-        }
-        double maxHeight = 700d;
-        if (height > maxHeight) {
-            height = maxHeight;
-        }
+        double imageWidth = image.getWidth();
+        double imageHeight = image.getHeight();
+//        System.out.println("width is " + width + " height is " + height);
         primaryStage.setWidth(width);
         primaryStage.setHeight(height + size);
         imageView.setImage(image);
         imageView.setPreserveRatio(true);
         stackPane.getChildren().remove(1);
-        stackPane.getChildren().add(createCanvas(width, height));
+        stackPane.getChildren().add(createCanvas(imageWidth, imageHeight));
     }
 
     public MenuBar createMenuBar(Stage primaryStage) {
@@ -206,6 +196,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        // 这里需要限制，不要超过屏幕分辨率
+        // 被限制的宽高
         imageView = new ImageView();
         MenuBar menuBar = createMenuBar(primaryStage);
         ScrollPane scrollPane = new ScrollPane();
